@@ -1,0 +1,25 @@
+#!/usr/bin/lua
+
+local sysconfig = require 'gluon.sysconfig'
+local sysctl = require 'gluon.sysctl'
+local site = require 'gluon.site_config'
+
+local uci = require('luci.model.uci').cursor()
+local lutil = require 'luci.util'
+
+uci:delete('batman-adv', 'bat0')
+uci:section('batman-adv', 'mesh', 'bat0',
+	    {
+		    orig_interval = 10000,
+		    gw_mode = 'client',
+		    gw_sel_class = gw_sel_class,
+		    hop_penalty = 15,
+		    multicast_mode = 1,
+			distributed_arp_table = 1,
+			bridge_loop_avoidance = 1,
+			aggregated_ogms = 1,
+	    }
+)
+uci:save('batman-adv')
+uci:commit('batman-adv')
+
